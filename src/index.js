@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-class Square extends React.Component {
+//we dont require class component square component is just to render the button and no state is required
+/* class Square extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -13,11 +14,21 @@ class Square extends React.Component {
       return (
         <button 
         className="square"
-        onClick = {() => this.setState({value: 'X'}) }>
-          {this.state.value}
+        onClick = { () => this.props.onClick() }>
+          {this.props.value}
         </button>
       );
     }
+  } */
+
+  function Square(props) {
+    return (
+      <button 
+      className = "square"
+      onClick = { props.onClick }>
+        {props.value}
+      </button>
+    );
   }
   
 class Board extends React.Component {
@@ -25,8 +36,19 @@ class Board extends React.Component {
     super(props);
     this.state = {
       squares: Array(9).fill(null),
+      xIsNext: true,
     };
   }
+
+    handleClick(i) {
+      const squares = this.state.squares.slice();
+      squares[i] = this.state.xIsNext ? 'X' : 'O';
+      this.setState({
+        squares: squares,
+        xIsNext: !this.state.xIsNext,
+      });
+    }
+
     renderSquare(i) {
       return (
       <Square 
@@ -37,7 +59,7 @@ class Board extends React.Component {
     }
   
     render() {
-      const status = 'Next player: X';
+      const status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
   
       return (
         <div>
